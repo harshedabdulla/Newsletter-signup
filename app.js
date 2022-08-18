@@ -3,6 +3,7 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const request=require("request");
+const https=require("https");
 
 const app=express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -19,8 +20,41 @@ app.get("/",function(req,res){
 
 app.post("/",function(req,res){
 
-    var firstname = req.body.fName;
-    var lastname = req.body.lName;
-    var email = req.body.email;
-    console.log(firstname,lastname,email);
+    const firstname = req.body.fName;
+    const lastname = req.body.lName;
+    const email = req.body.email;
+    // console.log(firstname,lastname,email);
+    const data ={
+        members: [
+            {
+                email_address:email,
+                status:"subscribed",
+                merge_fields: {
+                    FNAME: firstname,
+                    LNAME: lastname,
+                },
+             
+            }
+        ]
+    }
+    const jsonData=JSON.stringify(data);
+    const url ="https://us11.api.mailchimp.com/3.0/lists/66ab7780c6";
+    
+    const options ={
+        method: "POST",
+        auth: "harshed1:a7851c08f14f6f550410618699360ed3-us11"
+    }
+    const request = https.request(url,options,function(response){
+        response.on("data",function(data){
+            console.log(JSON.parse(data));
+        })
+        })
+    request.write(jsonData);
+    request.end();
+        
 });
+
+
+// api key - a7851c08f14f6f550410618699360ed3-us11
+
+//list id - 66ab7780c6
