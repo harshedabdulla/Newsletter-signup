@@ -60,6 +60,10 @@ app.post("/",function(req,res){
         
 });
 
+app.post("/failure",function(req,res){
+    res.redirect("/");
+});
+
 
 // api key - a7851c08f14f6f550410618699360ed3-us11
 
