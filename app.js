@@ -45,6 +45,12 @@ app.post("/",function(req,res){
         auth: "harshed1:a7851c08f14f6f550410618699360ed3-us11"
     }
     const request = https.request(url,options,function(response){
+        if(response.statusCode===200){
+            res.sendFile(__dirname+"/success.html");
+        }else{
+            res.sendFile(__dirname+"/failure.html");
+        }
+        
         response.on("data",function(data){
             console.log(JSON.parse(data));
         })
